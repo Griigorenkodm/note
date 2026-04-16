@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Воспоминай</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- рекомендованный meta viewport [web:17][web:19] -->
+    <style>
+        :root {
+            --bg: #f5f3ff;
+            --card-bg: #ffffff;
+            --accent: #7c3aed;
+            --accent-soft: #ede9fe;
+            --text-main: #1f2933;
+            --text-soft: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at top, #eef2ff 0, var(--bg) 45%, #f9fafb 100%);
+            color: var(--text-main);
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 14px 32px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .title {
+            font-size: 1.9rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 0.96rem;
+            color: var(--text-soft);
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* карточки адаптивно перестраиваются [web:18] */
+            gap: 12px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 14px 12px 12px;
+            border: 1px solid var(--border);
+            box-shadow:
+                0 10px 22px rgba(15, 23, 42, 0.06),
+                0 1px 1px rgba(15, 23, 42, 0.02);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top left,
+                        rgba(124, 58, 237, 0.08),
+                        transparent 55%);
+            pointer-events: none;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-number {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .card-hint {
+            font-size: 0.7rem;
+            color: var(--text-soft);
+            margin-left: auto;
+            padding-left: 6px;
+            white-space: nowrap;
+        }
+
+        textarea {
+            width: 100%;
+            resize: vertical;
+            min-height: 110px;  /* чуть выше по умолчанию на телефоне [web:11][web:13] */
+            max-height: 260px;
+            padding: 10px 10px 9px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            font: inherit;
+            line-height: 1.4;
+            color: var(--text-main);
+            background: #f9fafb;
+            outline: none;
+            position: relative;
+            z-index: 1;
+            transition:
+                border-color 0.15s ease,
+                box-shadow 0.15s ease,
+                background 0.15s ease;
+        }
+
+        textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        textarea:focus {
+            border-color: var(--accent);
+            background: #ffffff;
+            box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.2);
+        }
+
+        footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--text-soft);
+            padding: 0 8px 4px;
+        }
+
+        .tagline {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(124, 58, 237, 0.06);
+            color: var(--accent);
+            font-size: 0.74rem;
+            margin-bottom: 10px;
+        }
+
+        /* Мобильная оптимизация */
+        @media (max-width: 600px) {
+            .page {
+                padding: 16px 10px 24px;
+            }
+
+            header {
+                margin-bottom: 18px;
+            }
+
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr; /* на телефоне все карточки в одну колонку [web:18] */
+                gap: 10px;
+            }
+
+            .card {
+                border-radius: 14px;
+                padding: 12px 10px 10px;
+            }
+
+            .card-title {
+                font-size: 0.86rem;
+            }
+
+            .card-hint {
+                display: none; /* убираем мелкий текст, чтобы не мельтешил */
+            }
+
+            textarea {
+                min-height: 120px;
+                font-size: 0.9rem;
+            }
+
+            body {
+                background: #f5f3ff; /* упростим фон для слабых телефонов [web:14] */
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header>
+        <div class="tagline">Воспоминай • личные заметки</div>
+        <h1 class="title">А помнишь?..</h1>
+        <p class="subtitle">
+        Вспомни)
+        </p>
+    </header>
+
+    <main class="grid">
+        <article class="card">
+            <div class="card-header">
+                <div class="card-number">1</div>
+                <div class="card-title">А помнишь как мы познакомились?)</div>
+                <div class="card-hint">момент начала</div>
+            </div>
+            <div class="text">Помнишь ту площадку, те догонялки, как тыстала ко мне приставать)), как мы начали общаться, как ты меня нашла на следующий день?)</div>
+        </article>
+
+        <article class="card">
+            <div class="card-header">
+                <div class="card-number">2</div>
+                <div class="card-title">А помнишь?..</div>
+                <div class="card-hint">воспоминание</div>
+            </div>
+          <div class="text">А помнишь как мы прыгали через друг друга, и ты смеялась, очень сильно смеялась, у тебя не было проблем и сейчас не будет))</div>
+        </article>
+
+        <article class="card">
+            <div class="card-header">
+                <div class="card-number">3</div>
+                <div class="card-title">А помнишь смешной момент...</div>
+            <div class="card-hint">смех и лёгкость</div>
+            </div>
+        
+          <div class="text">А ещё помнишь как ты меня била палкой, и снова смеялась) Мне было больно, но я понимал, что делаю тебя счастливой))</div>
+        </article>
+        <article class="card">
+            <div class="card-header">
+                <div class="card-number">4</div>
+                <div class="card-title">А помнишь, как мы...</div>
+                <div class="card-hint">общее дело</div>
+            </div>
+        
+         <div class="text">А помнишь как мы сидели под деревом, а ты ела конфеты и мечтала, я был для тебя самым любимым человеком)</div>
+         </article>
+        <article class="card">
+            <div class="card-header">
+                <div class="card-number">5</div>
+                <div class="card-title">А помнишь?..</div>
+                <div class="card-hint">счастье</div>
+            </div>
+       
+<div class="text">А помнишь мороженое за 16.90 рублей, которое я для тебя купил, на копейку которую нашел на улице, ты была счастлива)))</div>
+ </article>
+        <article class="card">
+            <div class="card-header">
+                <div class="card-number">6</div>
+                <div class="card-title">А вспомни...</div>
+                <div class="card-hint">чувства</div>
+            </div>
+       
+                <div class="class"> Как мы лежали на теплой траве, а ты на мне, и вот так у нас проходил почти каждый день))</div>
+                  </article>
+
+        <article class="card">
+            <div class="card-header">
+                <div class="card-number">7</div>
+                <div class="card-title">Мне очень тепло)...</div>
+                <div class="card-hint">важные слова</div>
+            </div>
+           <div class="text">И вообще было лучшее время в жизни) Ни сколько не жалею, о нем) Разве, что об одном инциденте, который не связан с тобой)))</div>
+        </article>
+    </main>
+
+    <footer>
+        Эти заметки хранятся только в твоём браузере. Чтобы не потерять, сохрани страницу или сделай скриншоты.
+    </footer>
+</div>
+</body>
+</html>
